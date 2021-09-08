@@ -3,8 +3,8 @@ package environ
 import (
 	"context"
 	"fmt"
-	"github.com/YandexDatabase/ydb-go-sdk-auth-iam"
-	"github.com/YandexDatabase/ydb-go-sdk/v3"
+	"github.com/ydb-platform/ydb-go-sdk-auth-iam"
+	"github.com/ydb-platform/ydb-go-sdk/v3"
 	"os"
 )
 

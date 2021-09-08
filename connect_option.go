@@ -2,7 +2,7 @@ package environ
 
 import (
 	"context"
-	"github.com/YandexDatabase/ydb-go-sdk/v3/connect"
+	"github.com/ydb-platform/ydb-go-sdk/v3/connect"
 )
 
 func WithEnvironCredentials(ctx context.Context) connect.Option {
