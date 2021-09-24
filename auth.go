@@ -3,13 +3,15 @@ package environ
 import (
 	"context"
 	"fmt"
+	"github.com/ydb-platform/ydb-go-sdk/v3/credentials"
+	"os"
+
 	"github.com/ydb-platform/ydb-go-sdk-auth-iam"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
-	"os"
 )
 
 // FromEnviron returns default credentials from environ
-func FromEnviron(ctx context.Context) (ydb.Credentials, error) {
+func FromEnviron(ctx context.Context) (credentials.Credentials, error) {
 	if serviceAccountKeyFile, ok := os.LookupEnv("YDB_SERVICE_ACCOUNT_KEY_FILE_CREDENTIALS"); ok {
 		c, err := iam.NewClient(
 			iam.WithServiceFile(serviceAccountKeyFile),
@@ -23,17 +25,17 @@ func FromEnviron(ctx context.Context) (ydb.Credentials, error) {
 		return c, nil
 	}
 	if os.Getenv("YDB_ANONYMOUS_CREDENTIALS") == "1" {
-		return ydb.NewAnonymousCredentials("auth.FromEnviron(Env['YDB_ANONYMOUS_CREDENTIALS'])"), nil
+		return ydb.NewAnonymousCredentials(), nil
 	}
 	if os.Getenv("YDB_METADATA_CREDENTIALS") == "1" {
 		return iam.InstanceServiceAccount(
-			ydb.WithCredentialsSourceInfo(ctx, "auth.FromEnviron(Env['YDB_METADATA_CREDENTIALS'])"),
+			credentials.WithCredentialsSourceInfo(ctx, "auth.FromEnviron(Env['YDB_METADATA_CREDENTIALS'])"),
 		), nil
 	}
 	if accessToken, ok := os.LookupEnv("YDB_ACCESS_TOKEN_CREDENTIALS"); ok {
-		return ydb.NewAuthTokenCredentials(accessToken, "auth.FromEnviron(Env['YDB_ACCESS_TOKEN_CREDENTIALS'])"), nil
+		return ydb.NewAuthTokenCredentials(accessToken), nil
 	}
 	return iam.InstanceServiceAccount(
-		ydb.WithCredentialsSourceInfo(ctx, "auth.FromEnviron('otherwise - no known environment variables')"),
+		credentials.WithCredentialsSourceInfo(ctx, "auth.FromEnviron('otherwise - no known environment variables')"),
 	), nil
 }
