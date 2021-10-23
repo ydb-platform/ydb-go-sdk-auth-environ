@@ -51,10 +51,18 @@ github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/yandex-cloud/go-genproto v0.0.0-20210920083730-4a3e11726c4c h1:06YBVZg4neYF6Tk4ehUQHKGYz9/yG37PhPRdwPvUJl0=
 github.com/yandex-cloud/go-genproto v0.0.0-20210920083730-4a3e11726c4c/go.mod h1:HEUYX/p8966tMUHHT+TsS0hF/Ca/NYwqprC5WXSDMfE=
+github.com/yandex-cloud/go-genproto v0.0.0-20211012081957-400ccab0fe15 h1:2Q63F048sAzGLz4Qn6o5nW/LI0eil2d2hq4P7EFZaoI=
+github.com/yandex-cloud/go-genproto v0.0.0-20211012081957-400ccab0fe15/go.mod h1:HEUYX/p8966tMUHHT+TsS0hF/Ca/NYwqprC5WXSDMfE=
+github.com/ydb-platform/ydb-api-protos v0.0.0-20210921091122-f697ac767e19/go.mod h1:I0NWnA2hX8d2tKctW3AO2ne1Xc+FhvhA8PbP4iXQa5M=
 github.com/ydb-platform/ydb-go-genproto v0.0.0-20210916081217-f4e55570b874 h1:wbpYXEn87uEDkH3RvG37XW2ipEkqxpJUCGAoU1on0yE=
 github.com/ydb-platform/ydb-go-genproto v0.0.0-20210916081217-f4e55570b874/go.mod h1:cc138nptTn9eKptCQl/grxP6pBKpo/bnXDiOxuVZtps=
+github.com/ydb-platform/ydb-go-sdk/v3 v3.0.0-release/go.mod h1:RQPu87luEv7anp2YyDwijy/SXn+mrMaLRW800P40DoQ=
 github.com/ydb-platform/ydb-go-sdk/v3 v3.0.0 h1:32zXZLh65mTh11Trb9FXo6mbGPJFFCCfaEgDCE4OCKo=
 github.com/ydb-platform/ydb-go-sdk/v3 v3.0.0/go.mod h1:AVrHVTBBQQP93j4V1LduAq90BvFZAu0XNtkekY+ypDQ=
+github.com/ydb-platform/ydb-go-sdk/v3 v3.0.1-beta h1:XQ6BXNmQAMk1lxuXi+wJU636d2INxWu0P2a/dQpmyKU=
+github.com/ydb-platform/ydb-go-sdk/v3 v3.0.1-beta/go.mod h1:aDAMirAXDdCeMRJV01EykAXXz6Ye2eM7H7PRJb6DvHo=
+github.com/ydb-platform/ydb-go-yc v0.0.1-alpha h1:WBpCncTKtKs/G5Yz3tglC9OjDaWyMqVpDEM5GwECDmo=
+github.com/ydb-platform/ydb-go-yc v0.0.1-alpha/go.mod h1:Q8eanSKXgIIMpdSD7T8w6neg2hyvzLck5OB+kVY6wio=
 github.com/ydb-platform/ydb-go-yc v0.0.1 h1:yWUPHZ/884D56cLkjf/GTu2GwWToZ32W/joSk42IssQ=
 github.com/ydb-platform/ydb-go-yc v0.0.1/go.mod h1:y3EyHzJB2QgONksT94mz5gNNSBw5cMeh+v4O8weUcQU=
 go.opentelemetry.io/proto/otlp v0.7.0/go.mod h1:PqfVotwruBrMGOCsRd/89rSnXhoiJIqeYNgFYFoEGnI=
@@ -106,6 +114,7 @@ google.golang.org/grpc v1.27.0/go.mod h1:qbnxyOmOxrQa7FizSgH+ReBfzJrCY1pSN7KXBS8
 google.golang.org/grpc v1.33.1/go.mod h1:fr5YgcSWrqhRRxogOsw7RzIpsmvOZ6IcH4kBYTpR3n0=
 google.golang.org/grpc v1.36.0/go.mod h1:qjiiYl8FncCW8feJPdyg3v6XW24KsRHe+dy9BAGRRjU=
 google.golang.org/grpc v1.37.0/go.mod h1:NREThFqKR1f3iQ6oBuvc5LadQuXVGo9rkm5ZGrQdJfM=
+google.golang.org/grpc v1.38.0/go.mod h1:NREThFqKR1f3iQ6oBuvc5LadQuXVGo9rkm5ZGrQdJfM=
 google.golang.org/grpc v1.41.0 h1:f+PlOh7QV4iIJkPrx5NQ7qaNGFQ3OTse67yaDHfju4E=
 google.golang.org/grpc v1.41.0/go.mod h1:U3l9uK9J0sini8mHphKoXyaqDA/8VyGnDee1zzIUK6k=
 google.golang.org/protobuf v0.0.0-20200109180630-ec00e32a8dfd/go.mod h1:DFci5gLYBciE7Vtevhsrf46CRTquxDuWsQurQQe4oz8=
