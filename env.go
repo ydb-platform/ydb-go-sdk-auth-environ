@@ -10,7 +10,10 @@ import (
 
 func WithEnvironCredentials(ctx context.Context) ydb.Option {
 	if serviceAccountKeyFile, ok := os.LookupEnv("YDB_SERVICE_ACCOUNT_KEY_FILE_CREDENTIALS"); ok {
-		return yc.WithServiceAccountKeyFileCredentials(serviceAccountKeyFile)
+		return ydb.MergeOptions(
+			yc.WithInternalCA(),
+			yc.WithServiceAccountKeyFileCredentials(serviceAccountKeyFile),
+		)
 	}
 	if os.Getenv("YDB_ANONYMOUS_CREDENTIALS") == "1" {
 		return ydb.WithAnonymousCredentials()
