@@ -19,10 +19,16 @@ func WithEnvironCredentials(ctx context.Context) ydb.Option {
 		return ydb.WithAnonymousCredentials()
 	}
 	if os.Getenv("YDB_METADATA_CREDENTIALS") == "1" {
-		return yc.WithMetadataCredentials(ctx)
+		return ydb.MergeOptions(
+			yc.WithInternalCA(),
+			yc.WithMetadataCredentials(ctx),
+		)
 	}
 	if accessToken, ok := os.LookupEnv("YDB_ACCESS_TOKEN_CREDENTIALS"); ok {
 		return ydb.WithAccessTokenCredentials(accessToken)
 	}
-	return yc.WithMetadataCredentials(ctx)
+	return ydb.MergeOptions(
+		yc.WithInternalCA(),
+		yc.WithMetadataCredentials(ctx),
+	)
 }
