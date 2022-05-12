@@ -21,7 +21,7 @@ func WithEnvironCredentials(ctx context.Context) ydb.Option {
 	if os.Getenv("YDB_METADATA_CREDENTIALS") == "1" {
 		return ydb.MergeOptions(
 			yc.WithInternalCA(),
-			yc.WithMetadataCredentials(ctx),
+			yc.WithMetadataCredentials(),
 		)
 	}
 	if accessToken, ok := os.LookupEnv("YDB_ACCESS_TOKEN_CREDENTIALS"); ok {
@@ -29,6 +29,6 @@ func WithEnvironCredentials(ctx context.Context) ydb.Option {
 	}
 	return ydb.MergeOptions(
 		yc.WithInternalCA(),
-		yc.WithMetadataCredentials(ctx),
+		yc.WithMetadataCredentials(),
 	)
 }
