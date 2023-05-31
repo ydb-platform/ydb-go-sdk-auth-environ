@@ -9,6 +9,12 @@ import (
 )
 
 func WithEnvironCredentials(ctx context.Context) ydb.Option {
+	if serviceAccountKey, ok := os.LookupEnv("YDB_SERVICE_ACCOUNT_KEY_CREDENTIALS"); ok {
+		return ydb.MergeOptions(
+			yc.WithInternalCA(),
+			yc.WithServiceAccountKeyCredentials(serviceAccountKey),
+		)
+	}
 	if serviceAccountKeyFile, ok := os.LookupEnv("YDB_SERVICE_ACCOUNT_KEY_FILE_CREDENTIALS"); ok {
 		return ydb.MergeOptions(
 			yc.WithInternalCA(),
