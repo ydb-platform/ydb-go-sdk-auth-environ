@@ -8,7 +8,7 @@ import (
 	"github.com/ydb-platform/ydb-go-yc"
 )
 
-func WithEnvironCredentials(ctx context.Context) ydb.Option {
+func WithEnvironCredentials() ydb.Option {
 	if serviceAccountKey, ok := os.LookupEnv("YDB_SERVICE_ACCOUNT_KEY_CREDENTIALS"); ok {
 		return ydb.MergeOptions(
 			yc.WithInternalCA(),
