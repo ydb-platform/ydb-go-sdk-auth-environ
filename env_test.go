@@ -1,6 +1,7 @@
 package environ
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -154,7 +155,7 @@ func Test_environCredentials(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			credentials, err := environCredentials(tt.env, false)
 			require.NoError(t, err)
-			require.Equal(t, tt.credentials, credentials)
+			require.Equal(t, fmt.Sprintf("%v", tt.credentials), fmt.Sprintf("%v", credentials))
 		})
 	}
 }

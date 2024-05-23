@@ -2,6 +2,7 @@ package environ
 
 import (
 	"context"
+	"net/url"
 	"os"
 	"runtime"
 	"strconv"
@@ -13,10 +14,25 @@ import (
 	metadata "github.com/ydb-platform/ydb-go-yc-metadata"
 )
 
+func init() {
+	ydb.RegisterDsnParser(func(dsn string) (opts []ydb.Option, _ error) {
+		u, err := url.Parse(dsn)
+		if err != nil {
+			return nil, err
+		}
+		q := u.Query()
+		if q.Has("use_env_credentials") {
+			return []ydb.Option{WithEnvironCredentials()}, nil
+		}
+
+		return nil, nil
+	})
+}
+
 // WithEnvironCredentials check environment variables and creates credentials by it
 func WithEnvironCredentials() ydb.Option {
 	c, err := environCredentials(osLookupEnv{}, true)
-	if err != nil {
+	if err != nil || c == nil {
 		return func(ctx context.Context, c *ydb.Driver) error {
 			return err
 		}
@@ -56,10 +72,11 @@ func environCredentials(env lookupEnv, appendSourceInfo bool) (credentials.Crede
 			return yc.NewClient(
 				yc.WithServiceKey(serviceAccountKey),
 				yc.WithSourceInfo(
-					stackRecord()+"# YDB_SERVICE_ACCOUNT_KEY_CREDENTIALS",
+					stackRecord()+"#YDB_SERVICE_ACCOUNT_KEY_CREDENTIALS",
 				),
 			)
 		}
+
 		return yc.NewClient(
 			yc.WithServiceKey(serviceAccountKey),
 		)
@@ -69,10 +86,11 @@ func environCredentials(env lookupEnv, appendSourceInfo bool) (credentials.Crede
 			return yc.NewClient(
 				yc.WithServiceFile(serviceAccountKeyFile),
 				yc.WithSourceInfo(
-					stackRecord()+"# YDB_SERVICE_ACCOUNT_KEY_FILE_CREDENTIALS",
+					stackRecord()+"#YDB_SERVICE_ACCOUNT_KEY_FILE_CREDENTIALS",
 				),
 			)
 		}
+
 		return yc.NewClient(
 			yc.WithServiceFile(serviceAccountKeyFile),
 		)
@@ -81,10 +99,11 @@ func environCredentials(env lookupEnv, appendSourceInfo bool) (credentials.Crede
 		if appendSourceInfo {
 			return yc.NewInstanceServiceAccount(
 				metadata.WithInstanceServiceAccountCredentialsSourceInfo(
-					stackRecord() + "# YDB_METADATA_CREDENTIALS",
+					stackRecord() + "#YDB_METADATA_CREDENTIALS",
 				),
 			), nil
 		}
+
 		return yc.NewInstanceServiceAccount(), nil
 	}
 	if accessToken, ok := env.LookupEnv("YDB_ACCESS_TOKEN_CREDENTIALS"); ok {
@@ -92,10 +111,11 @@ func environCredentials(env lookupEnv, appendSourceInfo bool) (credentials.Crede
 			return credentials.NewAccessTokenCredentials(
 				accessToken,
 				credentials.WithSourceInfo(
-					stackRecord()+"# YDB_ACCESS_TOKEN_CREDENTIALS",
+					stackRecord()+"#YDB_ACCESS_TOKEN_CREDENTIALS",
 				),
 			), nil
 		}
+
 		return credentials.NewAccessTokenCredentials(
 			accessToken,
 		), nil
@@ -114,5 +134,22 @@ func environCredentials(env lookupEnv, appendSourceInfo bool) (credentials.Crede
 			}
 		}
 	}
+
+	if appendSourceInfo {
+		return credentials.NewAnonymousCredentials(
+			credentials.WithSourceInfo(stackRecord() + "#YDB_SERVICE_ACCOUNT_KEY_CREDENTIALS"),
+		), nil
+	}
+
+	if v, has := env.LookupEnv("YDB_ANONYMOUS_CREDENTIALS"); has && v == "0" {
+		return nil, nil
+	}
+
+	if appendSourceInfo {
+		return credentials.NewAnonymousCredentials(
+			credentials.WithSourceInfo(stackRecord() + "#YDB_ANONYMOUS_CREDENTIALS"),
+		), nil
+	}
+
 	return credentials.NewAnonymousCredentials(), nil
 }
