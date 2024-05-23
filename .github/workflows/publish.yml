@@ -28,7 +28,7 @@ jobs:
       CHANGELOG_FILE: CHANGELOG.md
       GITHUB_TOKEN: ${{ secrets.YDB_PLATFORM_BOT_TOKEN_REPO }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.YDB_PLATFORM_BOT_TOKEN_REPO }}
           fetch-depth: 0
@@ -39,9 +39,9 @@ jobs:
             echo "CHANGELOG empty"
             exit 1;
           fi;
-          MAJOR=$(cat $VERSION_FILE | grep VersionMajor | sed -e 's/^.*\ \(=\ \)*\(\"\)*\([0-9]*\)\(\"\)*.*/\3/g');
-          MINOR=$(cat $VERSION_FILE | grep VersionMinor | sed -e 's/^.*\ \(=\ \)*\(\"\)*\([0-9]*\)\(\"\)*.*/\3/g');
-          PATCH=$(cat $VERSION_FILE | grep VersionPatch | sed -e 's/^.*\ \(=\ \)*\(\"\)*\([0-9]*\)\(\"\)*.*/\3/g');
+          MAJOR=$(cat $VERSION_FILE | grep Major | sed -e 's/^.*\ \(=\ \)*\(\"\)*\([0-9]*\)\(\"\)*.*/\3/g');
+          MINOR=$(cat $VERSION_FILE | grep Minor | sed -e 's/^.*\ \(=\ \)*\(\"\)*\([0-9]*\)\(\"\)*.*/\3/g');
+          PATCH=$(cat $VERSION_FILE | grep Patch | sed -e 's/^.*\ \(=\ \)*\(\"\)*\([0-9]*\)\(\"\)*.*/\3/g');
           LAST_TAG="v$MAJOR.$MINOR.$PATCH";
           if [ "$VERSION_CHANGE" = "MINOR" ]
           then
@@ -57,8 +57,8 @@ jobs:
             RC=$(git tag | grep "v$MAJOR.$MINOR.$PATCH-rc" | wc -l);
             TAG="v$MAJOR.$MINOR.$PATCH-rc$RC";
           else
-            sed -e 's/VersionMinor = "\([0-9]*\)"/VersionMinor = "'$MINOR'"/g' -i $VERSION_FILE;
-            sed -e 's/VersionPatch = "\([0-9]*\)"/VersionPatch = "'$PATCH'"/g' -i $VERSION_FILE;
+            sed -e 's/Minor = "\([0-9]*\)"/Minor = "'$MINOR'"/g' -i $VERSION_FILE;
+            sed -e 's/Patch = "\([0-9]*\)"/Patch = "'$PATCH'"/g' -i $VERSION_FILE;
             git add $VERSION_FILE;
             echo "## v$MAJOR.$MINOR.$PATCH" >> $CHANGELOG_FILE.tmp
             cat $CHANGELOG_FILE >> $CHANGELOG_FILE.tmp
@@ -70,10 +70,10 @@ jobs:
             TAG="v$MAJOR.$MINOR.$PATCH";
           fi;
           git tag $TAG
-          git push --tags && git push
+          git push && git push --tags
           CHANGELOG="$CHANGELOG
           
-          Full Changelog: [$LAST_TAG...$TAG](https://github.com/ydb-platform/ydb-go-sdk/compare/$LAST_TAG...$TAG)"
+          Full Changelog: [$LAST_TAG...$TAG](https://github.com/ydb-platform/ydb-go-sdk-auth-environ/compare/$LAST_TAG...$TAG)"
           if [ "$RELEASE_CANDIDATE" = true ]
           then
             gh release create -d $TAG -t "$TAG" --notes "$CHANGELOG"
