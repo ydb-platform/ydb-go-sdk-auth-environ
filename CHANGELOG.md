@@ -1,3 +1,4 @@
+## v0.4.0
 * Added support `use_env_credentials` DSN parameter for use credentials from environ
 
 ## v0.3.1
