@@ -10,7 +10,7 @@ import (
 
 	"github.com/ydb-platform/ydb-go-sdk/v3"
 	"github.com/ydb-platform/ydb-go-sdk/v3/credentials"
-	"github.com/ydb-platform/ydb-go-yc"
+	yc "github.com/ydb-platform/ydb-go-yc"
 	metadata "github.com/ydb-platform/ydb-go-yc-metadata"
 )
 
@@ -139,6 +139,19 @@ func environCredentials(env lookupEnv, appendSourceInfo bool) (credentials.Crede
 		return credentials.NewAnonymousCredentials(
 			credentials.WithSourceInfo(stackRecord() + "#YDB_SERVICE_ACCOUNT_KEY_CREDENTIALS"),
 		), nil
+	}
+
+	if oauth2KeyFile, ok := env.LookupEnv("YDB_OAUTH2_KEY_FILE"); ok {
+		if appendSourceInfo {
+			return credentials.NewOauth2TokenExchangeCredentialsFile(
+				oauth2KeyFile,
+				credentials.WithSourceInfo(
+					stackRecord()+"#YDB_OAUTH2_KEY_FILE",
+				),
+			)
+		}
+
+		return credentials.NewOauth2TokenExchangeCredentialsFile(oauth2KeyFile)
 	}
 
 	if v, has := env.LookupEnv("YDB_ANONYMOUS_CREDENTIALS"); has && v == "0" {

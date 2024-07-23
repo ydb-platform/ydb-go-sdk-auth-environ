@@ -1,3 +1,5 @@
+* Added support of `YDB_OAUTH2_KEY_FILE` environment variable
+
 ## v0.4.0
 * Added support `use_env_credentials` DSN parameter for use credentials from environ
 
