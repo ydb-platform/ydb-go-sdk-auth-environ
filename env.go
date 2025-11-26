@@ -120,34 +120,25 @@ func environCredentials(env lookupEnv, appendSourceInfo bool) (credentials.Crede
 			accessToken,
 		), nil
 	}
-	if appendSourceInfo {
-		return credentials.NewAnonymousCredentials(
-			credentials.WithSourceInfo(
-				stackRecord(),
-			),
-		), nil
-	}
 	if user, ok := env.LookupEnv("YDB_STATIC_CREDENTIALS_USER"); ok {
 		if password, ok := env.LookupEnv("YDB_STATIC_CREDENTIALS_PASSWORD"); ok {
 			if endpoint, ok := env.LookupEnv("YDB_STATIC_CREDENTIALS_ENDPOINT"); ok {
+				if appendSourceInfo {
+					return credentials.NewStaticCredentials(user, password, endpoint,
+						credentials.WithSourceInfo(stackRecord()+"#YDB_SERVICE_ACCOUNT_KEY_CREDENTIALS"),
+					), nil
+				}
+
 				return credentials.NewStaticCredentials(user, password, endpoint), nil
 			}
 		}
-	}
-
-	if appendSourceInfo {
-		return credentials.NewAnonymousCredentials(
-			credentials.WithSourceInfo(stackRecord() + "#YDB_SERVICE_ACCOUNT_KEY_CREDENTIALS"),
-		), nil
 	}
 
 	if oauth2KeyFile, ok := env.LookupEnv("YDB_OAUTH2_KEY_FILE"); ok {
 		if appendSourceInfo {
 			return credentials.NewOauth2TokenExchangeCredentialsFile(
 				oauth2KeyFile,
-				credentials.WithSourceInfo(
-					stackRecord()+"#YDB_OAUTH2_KEY_FILE",
-				),
+				credentials.WithSourceInfo(stackRecord()+"#YDB_OAUTH2_KEY_FILE"),
 			)
 		}
 
@@ -155,13 +146,13 @@ func environCredentials(env lookupEnv, appendSourceInfo bool) (credentials.Crede
 	}
 
 	if v, has := env.LookupEnv("YDB_ANONYMOUS_CREDENTIALS"); has && v == "0" {
-		return nil, nil
-	}
+		if appendSourceInfo {
+			return credentials.NewAnonymousCredentials(
+				credentials.WithSourceInfo(stackRecord() + "#YDB_ANONYMOUS_CREDENTIALS"),
+			), nil
+		}
 
-	if appendSourceInfo {
-		return credentials.NewAnonymousCredentials(
-			credentials.WithSourceInfo(stackRecord() + "#YDB_ANONYMOUS_CREDENTIALS"),
-		), nil
+		return credentials.NewAnonymousCredentials(), nil
 	}
 
 	return credentials.NewAnonymousCredentials(), nil
