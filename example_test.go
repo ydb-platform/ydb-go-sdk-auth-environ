@@ -2,9 +2,7 @@ package environ_test
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"io"
 	"os"
 	"time"
 
@@ -27,42 +25,11 @@ func Example_withEnvironCredentials() {
 	defer db.Close(ctx) // cleanup resources
 
 	var helloWorld string
-	err = db.Query().Do(ctx, func(ctx context.Context, s query.Session) error {
-		_, result, err := s.Execute(ctx, "SELECT 'HELLO WORLD'u")
-		if err != nil {
-			return err
-		}
-		defer result.Close(ctx)
-
-		for {
-			rs, err := result.NextResultSet(ctx)
-			if err != nil {
-				if errors.Is(err, io.EOF) {
-					return nil
-				}
-
-				return err
-			}
-
-			for {
-				row, err := rs.NextRow(ctx)
-				if err != nil {
-					if errors.Is(err, io.EOF) {
-						return nil
-					}
-				}
-
-				if err := row.Scan(&helloWorld); err != nil {
-					return err
-				}
-			}
-
-			return nil
-		}
-
-		return nil
-	}, query.WithIdempotent())
+	row, err := db.Query().QueryRow(ctx, "SELECT 'HELLO WORLD'u", query.WithIdempotent())
 	if err != nil {
+		panic(err)
+	}
+	if err := row.Scan(&helloWorld); err != nil {
 		panic(err)
 	}
 
@@ -84,42 +51,11 @@ func Example_dsnParameterForUseEnvironCredentials() {
 	defer db.Close(ctx) // cleanup resources
 
 	var helloWorld string
-	err = db.Query().Do(ctx, func(ctx context.Context, s query.Session) error {
-		_, result, err := s.Execute(ctx, "SELECT 'HELLO WORLD'u")
-		if err != nil {
-			return err
-		}
-		defer result.Close(ctx)
-
-		for {
-			rs, err := result.NextResultSet(ctx)
-			if err != nil {
-				if errors.Is(err, io.EOF) {
-					return nil
-				}
-
-				return err
-			}
-
-			for {
-				row, err := rs.NextRow(ctx)
-				if err != nil {
-					if errors.Is(err, io.EOF) {
-						return nil
-					}
-				}
-
-				if err := row.Scan(&helloWorld); err != nil {
-					return err
-				}
-			}
-
-			return nil
-		}
-
-		return nil
-	}, query.WithIdempotent())
+	row, err := db.Query().QueryRow(ctx, "SELECT 'HELLO WORLD'u", query.WithIdempotent())
 	if err != nil {
+		panic(err)
+	}
+	if err := row.Scan(&helloWorld); err != nil {
 		panic(err)
 	}
 
