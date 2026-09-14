@@ -48,19 +48,16 @@ func Example_withEnvironCredentials() {
 				row, err := rs.NextRow(ctx)
 				if err != nil {
 					if errors.Is(err, io.EOF) {
-						return nil
+						break
 					}
+					return err
 				}
 
 				if err := row.Scan(&helloWorld); err != nil {
 					return err
 				}
 			}
-
-			return nil
 		}
-
-		return nil
 	}, query.WithIdempotent())
 	if err != nil {
 		panic(err)
@@ -105,19 +102,16 @@ func Example_dsnParameterForUseEnvironCredentials() {
 				row, err := rs.NextRow(ctx)
 				if err != nil {
 					if errors.Is(err, io.EOF) {
-						return nil
+						break
 					}
+					return err
 				}
 
 				if err := row.Scan(&helloWorld); err != nil {
 					return err
 				}
 			}
-
-			return nil
 		}
-
-		return nil
 	}, query.WithIdempotent())
 	if err != nil {
 		panic(err)
