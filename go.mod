@@ -1,12 +1,12 @@
 module github.com/ydb-platform/ydb-go-sdk-auth-environ
 
-go 1.20
+go 1.21
 
 require (
 	github.com/stretchr/testify v1.8.3
 	github.com/ydb-platform/ydb-go-sdk/v3 v3.75.2
-	github.com/ydb-platform/ydb-go-yc v0.12.1
-	github.com/ydb-platform/ydb-go-yc-metadata v0.6.1
+	github.com/ydb-platform/ydb-go-yc v0.12.5
+	github.com/ydb-platform/ydb-go-yc-metadata v0.6.2
 )
 
 require (
@@ -16,7 +16,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jonboulle/clockwork v0.3.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/yandex-cloud/go-genproto v0.0.0-20211115083454-9ca41db5ed9e // indirect
+	github.com/yandex-cloud/go-genproto v0.0.0-20240819112322-98a264d392f6 // indirect
 	github.com/ydb-platform/ydb-go-genproto v0.0.0-20240528144234-5d5a685e41f7 // indirect
 	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/sync v0.6.0 // indirect
